@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
 @Component
-class PromocaoServiceImpl( val promocaoRepository: PromocaoRepository) : PromocaoService {
+class PromocaoServiceImpl( val promocaoRepository: PromocaoRepository) : PromocaoService{
     
     override fun create(promocao: Promocao) {
         promocaoRepository.save(promocao)
@@ -20,7 +20,7 @@ class PromocaoServiceImpl( val promocaoRepository: PromocaoRepository) : Promoca
     }
     
     override fun delete(id: Long) {
-        promocaoRepository.deleteById(id)
+        promocaoRepository.delete(Promocao(id = id))
     }
     
     override fun update(id: Long, promocao: Promocao) {
@@ -28,12 +28,9 @@ class PromocaoServiceImpl( val promocaoRepository: PromocaoRepository) : Promoca
     }
     
     override fun searchByLocal(local: String): List<Promocao> =
-            listOf()
+           listOf()
     
     override fun getAll(): List<Promocao> {
-        return promocaoRepository.findAll().toList()
+        return promocaoRepository.findAll()
     }
-    
-    override fun count(): Long =
-        promocaoRepository.count()
 }
