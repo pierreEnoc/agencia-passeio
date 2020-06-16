@@ -19,4 +19,6 @@ class JsonController {
         var cliente = Cliente(1,"pierre", Date(),telefone)
         return cliente
     }
+   
+    
 }

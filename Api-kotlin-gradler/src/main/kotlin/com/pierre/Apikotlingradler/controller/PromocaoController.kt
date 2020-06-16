@@ -1,5 +1,6 @@
 package com.pierre.Apikotlingradler.controller
 
+import com.pierre.Apikotlingradler.exception.PromocaoNotFoundException
 import com.pierre.Apikotlingradler.model.Promocao
 import com.pierre.Apikotlingradler.model.RespostaJson
 import com.pierre.Apikotlingradler.service.PromocaoService
@@ -19,9 +20,10 @@ class PromocaoController {
     
     @GetMapping("/{id}")
     fun getById(@PathVariable id: Long): ResponseEntity<Promocao?> {
-        var promocao = promocaoService.getById(id)
-        var status = if (promocao == null) HttpStatus.NOT_FOUND else HttpStatus.OK
-        return ResponseEntity(promocao, status)
+        var promocao = promocaoService.getById(id)?:
+                throw PromocaoNotFoundException("Promocao ${id} nao localizado")
+        
+        return ResponseEntity(promocao, HttpStatus.OK)
     }
     
     @PostMapping()
