@@ -23,16 +23,16 @@ class PromocaoController {
     fun getById(@PathVariable id: Long): ResponseEntity<Any> {
         var promocao = promocaoService.getById(id)
         return if (promocao != null)
-            return ResponseEntity(promocao,HttpStatus.OK)
+            return ResponseEntity(promocao, HttpStatus.OK)
         else
-            return  ResponseEntity(ErrorMessage("Promocao Nao Localizado","promocao ${id} nao localizada"), HttpStatus.NOT_FOUND)
+            return ResponseEntity(ErrorMessage("Promocao Nao Localizado", "promocao ${id} nao localizada"), HttpStatus.NOT_FOUND)
         
     }
     
     @PostMapping()
     fun create(@RequestBody promocao: Promocao): ResponseEntity<RespostaJson> {
         promocaoService.create(promocao)
-       val respostaJson = RespostaJson("Created", Date())
+        val respostaJson = RespostaJson("Created", Date())
         return ResponseEntity(respostaJson, HttpStatus.CREATED)
     }
     
@@ -57,13 +57,16 @@ class PromocaoController {
     }
     
     @RequestMapping
-    fun getAll(@RequestParam(required = false, defaultValue = "") localFilter: String): ResponseEntity<List<Promocao>> {
-       val listaPromocoes = promocaoService.getAll()
-       val status=  if(listaPromocoes.size == 0)HttpStatus.NOT_FOUND else HttpStatus.OK
-        return ResponseEntity(listaPromocoes, status)
+    fun getAll(@RequestParam(required = false, defaultValue = "0") start: Int,
+               @RequestParam(required = false, defaultValue = "3") size: Int): ResponseEntity<List<Promocao>> {
+        
+        val list = promocaoService.getAll(start, size)
+        val status = if (list.size == 0) HttpStatus.NOT_FOUND else HttpStatus.OK
+        return ResponseEntity(list, status)
     }
+    
     @GetMapping("/count")
     fun count(): ResponseEntity<Map<String, Long>> =
-       ResponseEntity.ok().body(mapOf("count" to promocaoService.count()))
+            ResponseEntity.ok().body(mapOf("count" to promocaoService.count()))
     
 }
