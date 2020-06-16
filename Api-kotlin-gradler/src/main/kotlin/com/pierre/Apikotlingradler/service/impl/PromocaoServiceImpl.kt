@@ -6,6 +6,7 @@ import com.pierre.Apikotlingradler.service.PromocaoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
@@ -33,10 +34,14 @@ class PromocaoServiceImpl( val promocaoRepository: PromocaoRepository) : Promoca
             listOf()
     
     override fun getAll(start: Int, size : Int): List<Promocao> {
-       val pages:Pageable = PageRequest.of(start, size)
+       val pages:Pageable = PageRequest.of(start, size, Sort.by("local").ascending())
         return promocaoRepository.findAll(pages).toList()
     }
     
     override fun count(): Long =
         promocaoRepository.count()
+    
+    override fun getAllSortedByLocal(): List<Promocao> =
+        promocaoRepository.findAll(Sort.by("local").descending()).toList()
+    
 }
