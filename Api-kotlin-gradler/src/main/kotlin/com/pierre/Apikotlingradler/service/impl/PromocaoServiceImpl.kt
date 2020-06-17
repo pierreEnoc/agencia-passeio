@@ -4,9 +4,11 @@ import com.pierre.Apikotlingradler.model.Promocao
 import com.pierre.Apikotlingradler.repository.PromocaoRepository
 import com.pierre.Apikotlingradler.service.PromocaoService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
@@ -19,7 +21,7 @@ class PromocaoServiceImpl( val promocaoRepository: PromocaoRepository) : Promoca
     
     
     override fun getById(id: Long): Promocao? {
-        return promocaoRepository.findById(id).orElseGet(null)
+        return promocaoRepository.findByIdOrNull(id)
     }
     
     override fun delete(id: Long) {
@@ -33,10 +35,17 @@ class PromocaoServiceImpl( val promocaoRepository: PromocaoRepository) : Promoca
     override fun searchByLocal(local: String): List<Promocao> =
             listOf()
     
-    override fun getAll(start: Int, size : Int): List<Promocao> {
-       val pages:Pageable = PageRequest.of(start, size, Sort.by("local").ascending())
-        return promocaoRepository.findAll(pages).toList()
+    override fun findAll(pageable: Pageable): Page<Promocao> {
+        //fun  (pageable: Pageable): Page<Promocao?> {
+            return promocaoRepository.findAll(pageable)
+       // }
     }
+    
+    
+    // override fun getAll(start: Int, size : Int): List<Promocao> {
+      // val pages:Pageable = PageRequest.of(start, size, Sort.by("local").ascending())
+      //  return promocaoRepository.findAll(pages).toList()
+   // }
     
     override fun count(): Long =
         promocaoRepository.count()

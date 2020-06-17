@@ -6,10 +6,12 @@ import com.pierre.Apikotlingradler.model.Promocao
 import com.pierre.Apikotlingradler.model.RespostaJson
 import com.pierre.Apikotlingradler.service.PromocaoService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+
 import java.util.*
 
 
@@ -26,7 +28,6 @@ class PromocaoController {
             return ResponseEntity(promocao, HttpStatus.OK)
         else
             return ResponseEntity(ErrorMessage("Promocao Nao Localizado", "promocao ${id} nao localizada"), HttpStatus.NOT_FOUND)
-        
     }
     
     @PostMapping()
@@ -55,15 +56,17 @@ class PromocaoController {
         }
         return ResponseEntity(Unit, status)
     }
-    
     @RequestMapping
-    fun getAll(@RequestParam(required = false, defaultValue = "0") start: Int,
-               @RequestParam(required = false, defaultValue = "3") size: Int): ResponseEntity<List<Promocao>> {
+    fun findAll (pageable: Pageable) = promocaoService.findAll(pageable)
+    
+   // @RequestMapping
+    //fun getAll(@RequestParam(required = false, defaultValue = "0") start: Int,
+           //    @RequestParam(required = false, defaultValue = "3") size: Int): ResponseEntity<List<Promocao>> {
         
-        val list = promocaoService.getAll(start, size)
-        val status = if (list.size == 0) HttpStatus.NOT_FOUND else HttpStatus.OK
-        return ResponseEntity(list, status)
-    }
+      //  val list = promocaoService.getAll(start, size)
+     //   val status = if (list.size == 0) HttpStatus.NOT_FOUND else HttpStatus.OK
+      //  return ResponseEntity(list, status)
+  //  }
     
     @GetMapping("/count")
     fun count(): ResponseEntity<Map<String, Long>> =
